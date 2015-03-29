@@ -14,13 +14,15 @@ import javax.swing.Timer;
 public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
 		
-	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
+	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	private ArrayList<Item> items = new ArrayList<Item>();	
 	private SpaceShip v;	
 	
 	private Timer timer;
 	
 	private long score = 0;
 	private double difficulty = 0.1;
+	private double difficulty2 = 0.01;
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
@@ -48,10 +50,20 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.sprites.add(e);
 		enemies.add(e);
 	}
+
+	private void generateItem(){
+		Item i = new Item((int)(Math.random()*390), 30);
+		gp.sprites.add(i);
+		items.add(i);
+	}
 	
 	private void process(){
 		if(Math.random() < difficulty){
 			generateEnemy();
+		}
+
+		if(Math.random() < difficulty2){
+			generateItem();
 		}
 		
 		Iterator<Enemy> e_iter = enemies.iterator();
@@ -63,6 +75,17 @@ public class GameEngine implements KeyListener, GameReporter{
 				e_iter.remove();
 				gp.sprites.remove(e);
 				score += 100;
+			}
+		}
+
+		Iterator<Item> i_iter = items.iterator();
+		while(i_iter.hasNext()){
+			Item i = i_iter.next();
+			i.proceed();
+			
+			if(!i.isAlive()){
+				i_iter.remove();
+				gp.sprites.remove(i);
 			}
 		}
 		
@@ -77,8 +100,19 @@ public class GameEngine implements KeyListener, GameReporter{
 				return;
 			}
 		}
+		for(Item i : items){
+			er = i.getRectangle();
+			if(er.intersects(vr)){
+				bonusScore();
+				return;
+			}
+		}
 	}
 	
+	public void bonusScore(){
+		score += 1000;
+	}
+
 	public void die(){
 		timer.stop();
 	}
