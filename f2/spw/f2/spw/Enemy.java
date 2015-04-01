@@ -34,9 +34,13 @@ public class Enemy extends Sprite{
 		if(y > Y_TO_DIE){
 			alive = false;
 		}
-	}
+	}	
 	
 	public boolean isAlive(){
 		return alive;
+	}
+	
+	public void remove() {
+		alive = false;
 	}
 }

@@ -2,7 +2,6 @@ package f2.spw;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.io.File;
 
 public class SpaceShip extends Sprite{
 

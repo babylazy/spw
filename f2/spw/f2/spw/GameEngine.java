@@ -15,7 +15,8 @@ public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
 		
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-	private ArrayList<Item> items = new ArrayList<Item>();	
+	private ArrayList<Item> items = new ArrayList<Item>();
+	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private SpaceShip v;	
 	
 	private Timer timer;
@@ -57,6 +58,12 @@ public class GameEngine implements KeyListener, GameReporter{
 		items.add(i);
 	}
 	
+	private void generateBullet(){
+		Bullet b = new Bullet(v.getX(), v.getY());
+		gp.sprites.add(b);
+		bullets.add(b);
+	}
+	
 	private void process(){
 		if(Math.random() < difficulty){
 			generateEnemy();
@@ -78,7 +85,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			}
 		}
 
-		Iterator<Item> i_iter = items.iterator();
+		Iterator<Item> i_iter = items.iterator();		
 		while(i_iter.hasNext()){
 			Item i = i_iter.next();
 			i.proceed();
@@ -89,10 +96,22 @@ public class GameEngine implements KeyListener, GameReporter{
 			}
 		}
 		
+		Iterator<Bullet> b_iter = bullets.iterator();
+		while(b_iter.hasNext()){
+			Bullet b = b_iter.next();
+			b.proceed();
+			
+			if(!b.isAlive()){
+				b_iter.remove();
+				gp.sprites.remove(b);
+			}
+		}
+		
 		gp.updateGameUI(this);
 		
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double er;
+		Rectangle2D.Double br;
 		for(Enemy e : enemies){
 			er = e.getRectangle();
 			if(er.intersects(vr)){
@@ -100,11 +119,26 @@ public class GameEngine implements KeyListener, GameReporter{
 				return;
 			}
 		}
+		
 		for(Item i : items){
 			er = i.getRectangle();
 			if(er.intersects(vr)){
 				bonusScore();
+				i_iter.remove();
+				gp.sprites.remove(i);
 				return;
+			}
+		}
+		
+		for(Bullet b : bullets){
+			br = b.getRectangle();
+			for(Enemy e : enemies){
+				er = e.getRectangle();
+				if(br.intersects(er)){
+					e.remove();
+					gp.sprites.remove(e);
+					return;
+				}
 			}
 		}
 	}
@@ -120,14 +154,22 @@ public class GameEngine implements KeyListener, GameReporter{
 	void controlVehicle(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
-			v.move(-1);
+			v.move(-1, 0);
 			break;
 		case KeyEvent.VK_RIGHT:
-			v.move(1);
+			v.move(1, 0);
 			break;
 		case KeyEvent.VK_D:
 			difficulty += 0.1;
 			break;
+		case KeyEvent.VK_UP:
+			v.move(0, 1);
+			break;
+		case KeyEvent.VK_DOWN:
+			v.move(0, -1);
+			break;
+		case KeyEvent.VK_X:
+			generateBullet();
 		}
 	}
 

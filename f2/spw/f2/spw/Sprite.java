@@ -16,7 +16,15 @@ public abstract class Sprite {
 		this.width = width;
 		this.height = height;
 	}
-
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}	
+	
 	abstract public void draw(Graphics2D g);
 	
 	public Double getRectangle() {
