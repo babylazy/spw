@@ -8,6 +8,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 
@@ -105,9 +106,7 @@ public class GameEngine implements KeyListener, GameReporter{
 				b_iter.remove();
 				gp.sprites.remove(b);
 			}
-		}
-		
-		gp.updateGameUI(this);
+		}		
 		
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double er;
@@ -115,7 +114,10 @@ public class GameEngine implements KeyListener, GameReporter{
 		for(Enemy e : enemies){
 			er = e.getRectangle();
 			if(er.intersects(vr)){
-				die();
+				v.shot();
+				if(v.getLife() < 0)
+					die();
+				e.remove();
 				return;
 			}
 		}
@@ -124,7 +126,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			er = i.getRectangle();
 			if(er.intersects(vr)){
 				bonusScore();
-				i_iter.remove();
+				i.remove();
 				gp.sprites.remove(i);
 				return;
 			}
@@ -141,14 +143,21 @@ public class GameEngine implements KeyListener, GameReporter{
 				}
 			}
 		}
+		
+		gp.updateGameUI(this, v.getLife());
 	}
 	
 	public void bonusScore(){
 		score += 1000;
 	}
+	
+	public void reduceScore(){
+		score -= 100;
+	}
 
 	public void die(){
 		timer.stop();
+		gameOver();
 	}
 	
 	void controlVehicle(KeyEvent e) {
@@ -191,5 +200,9 @@ public class GameEngine implements KeyListener, GameReporter{
 	@Override
 	public void keyTyped(KeyEvent e) {
 		//do nothing		
+	}
+	
+	public void gameOver() {
+		JOptionPane.showMessageDialog(null, "Your score is " + score, "GAME OVER!!", JOptionPane.INFORMATION_MESSAGE );
 	}
 }

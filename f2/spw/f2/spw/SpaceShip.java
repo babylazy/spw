@@ -7,6 +7,7 @@ import java.io.File;
 public class SpaceShip extends Sprite{
 
 	int step = 8;
+	int life = 5;
 	
 	public SpaceShip(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -32,6 +33,14 @@ public class SpaceShip extends Sprite{
 			y = 0;
 		if(y > 600 - height)
 			y = 600 - height;
-	}	
+	}
+	
+	public void shot() {
+		life -= 1;
+	}
+	
+	public int getLife() {
+		return life;
+	}
 
 }

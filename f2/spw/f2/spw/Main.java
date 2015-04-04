@@ -1,11 +1,17 @@
 package f2.spw;
 
 import java.awt.BorderLayout;
-
+import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 
 public class Main {
 	public static void main(String[] args){
+		String name;
+		String wMessage = "Welcome to spacewar";
+		
+		JOptionPane.showMessageDialog(null, wMessage, "Welcome!!", JOptionPane.INFORMATION_MESSAGE );
+		//name = JOptionPane.showInputDialog("Enter your name here :");
+		
 		JFrame frame = new JFrame("Space War");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(400, 650);

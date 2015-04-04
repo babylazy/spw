@@ -39,4 +39,8 @@ public class Item extends Sprite{
 	public boolean isAlive(){
 		return alive;
 	}
+	
+	public void remove() {
+		alive = false;
+	}
 }

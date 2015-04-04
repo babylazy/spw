@@ -10,9 +10,10 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
 	
-	private BufferedImage bi;	
+	private BufferedImage bi;
 	Graphics2D big;
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
+	String name;
 
 	public GamePanel() {
 		bi = new BufferedImage(400, 600, BufferedImage.TYPE_INT_ARGB);
@@ -20,17 +21,29 @@ public class GamePanel extends JPanel {
 		big.setBackground(Color.BLACK);
 	}
 
-	public void updateGameUI(GameReporter reporter){
+	public void updateGameUI(GameReporter reporter, int life){
 		big.clearRect(0, 0, 400, 600);
 		
 		big.setColor(Color.WHITE);		
 		big.drawString(String.format("%08d", reporter.getScore()), 300, 20);
+		
+		big.setColor(Color.RED);
+		big.fillOval(7, 8, 14, 14);
+        big.fillOval(18, 8, 14, 14);
+        
+		int[] xs = { 10, 20, 30, 20 };
+        int[] ys = { 20, 10, 20, 30 };
+        big.fillPolygon(xs, ys, 4);
+        
+		
+		big.drawString("" + life, 40, 20);
+		
 		for(Sprite s : sprites){
 			s.draw(big);
 		}
 		
 		repaint();
-	}
+	}	
 
 	@Override
 	public void paint(Graphics g) {
