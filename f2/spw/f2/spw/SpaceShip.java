@@ -1,23 +1,30 @@
 package f2.spw;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import javax.imageio.ImageIO;
 import java.io.File;
+import java.io.IOException;
 
 public class SpaceShip extends Sprite{
+	private Image spshipImage;
 
 	int step = 8;
 	int life = 5;
 	
 	public SpaceShip(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		
+		try {
+			File source = new File("f2/spw/Icons/JediStarFighter.png");
+			spshipImage = ImageIO.read(source);
+		}catch (IOException e) {
+			e.printStackTrace();
+        }
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.BLUE);
-		g.fillRect(x, y, width, height);
+		g.drawImage(spshipImage, x, y, width, height, null);
 		
 	}
 
