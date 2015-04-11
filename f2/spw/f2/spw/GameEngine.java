@@ -24,7 +24,8 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	private long score = 0;
 	private double difficulty = 0.1;
-	private double difficulty2 = 0.01;
+	private double difficulty2 = 0.001;
+	private boolean upgBullet = false;
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
@@ -54,15 +55,33 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 
 	private void generateItem(){
-		Item i = new Item((int)(Math.random()*390), 30);
-		gp.sprites.add(i);
-		items.add(i);
+		//Item i = new Item((int)(Math.random()*390), 30);
+		Bonusscore bs = new Bonusscore((int)(Math.random()*390), 30);
+		Slowmotion sm = new Slowmotion((int)(Math.random()*390), 30);
+		Pluslife pl = new Pluslife((int)(Math.random()*390), 30);
+		//gp.sprites.add(i);
+		//items.add(i);
+		gp.sprites.add(bs);
+		items.add(bs);
+		gp.sprites.add(sm);
+		items.add(sm);
+		gp.sprites.add(pl);
+		items.add(pl);
 	}
 	
 	private void generateBullet(){
-		Bullet b = new Bullet(v.getX(), v.getY());
+		Bullet b = new Bullet(v.getX() + 35, v.getY());
 		gp.sprites.add(b);
 		bullets.add(b);
+	}
+	
+	private void generateUpgBullet(){
+		Bullet b1 = new Bullet(v.getX() + 15, v.getY());
+		Bullet b2 = new Bullet(v.getX() + 55, v.getY());
+		gp.sprites.add(b1);
+		bullets.add(b1);
+		gp.sprites.add(b2);
+		bullets.add(b2);
 	}
 	
 	private void process(){
@@ -110,6 +129,9 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double er;
+		Rectangle2D.Double bsr;
+		Rectangle2D.Double smr;
+		Rectangle2D.Double plr;
 		Rectangle2D.Double br;
 		for(Enemy e : enemies){
 			er = e.getRectangle();
@@ -123,9 +145,10 @@ public class GameEngine implements KeyListener, GameReporter{
 		}
 		
 		for(Item i : items){
-			er = i.getRectangle();
+			er = i.getRectangle();			
 			if(er.intersects(vr)){
 				bonusScore();
+				upgBullet = true;
 				i.remove();
 				gp.sprites.remove(i);
 				return;
@@ -178,7 +201,11 @@ public class GameEngine implements KeyListener, GameReporter{
 			v.move(0, -1);
 			break;
 		case KeyEvent.VK_X:
-			generateBullet();
+			if(upgBullet){
+				generateUpgBullet();
+			}else{
+				generateBullet();
+			}
 		}
 	}
 
