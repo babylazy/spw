@@ -18,13 +18,15 @@ public class GameEngine implements KeyListener, GameReporter{
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-	private SpaceShip v;	
+	private ArrayList<Boss> bosses = new ArrayList<Boss>();
+	private SpaceShip v;
 	
 	private Timer timer;
 	
 	private long score = 0;
 	private double difficulty = 0.1;
 	private double difficulty2 = 0.001;
+	private double difficulty3 = 0.01;
 	private boolean upgBullet = false;
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
@@ -84,13 +86,23 @@ public class GameEngine implements KeyListener, GameReporter{
 		bullets.add(b2);
 	}
 	
-	private void process(){
+	private void generateBoss(){
+		Boss boss = new Boss((int)(Math.random()*390), 30);
+		gp.sprites.add(boss);
+		bosses.add(boss);
+	}
+	
+	private void process(){	
 		if(Math.random() < difficulty){
 			generateEnemy();
 		}
 
 		if(Math.random() < difficulty2){
 			generateItem();
+		}
+		
+		if(Math.random() < difficulty3){
+			generateBoss();
 		}
 		
 		Iterator<Enemy> e_iter = enemies.iterator();
@@ -125,13 +137,26 @@ public class GameEngine implements KeyListener, GameReporter{
 				b_iter.remove();
 				gp.sprites.remove(b);
 			}
-		}		
+		}
+		
+		Iterator<Boss> boss_iter = bosses.iterator();
+		while(boss_iter.hasNext()){
+			Boss boss = boss_iter.next();
+			boss.proceed();
+			
+			if(boss.getHp() < 0){
+				boss_iter.remove();
+				gp.sprites.remove(boss);
+				score += 5000;
+			}
+		}
 		
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double er;
-		Rectangle2D.Double bsr;
-		Rectangle2D.Double smr;
-		Rectangle2D.Double plr;
+		Rectangle2D.Double bossr;
+		//Rectangle2D.Double bsr;
+		//Rectangle2D.Double smr;
+		//Rectangle2D.Double plr;
 		Rectangle2D.Double br;
 		for(Enemy e : enemies){
 			er = e.getRectangle();
@@ -165,7 +190,21 @@ public class GameEngine implements KeyListener, GameReporter{
 					return;
 				}
 			}
-		}
+			
+			for(Boss boss : bosses){
+				bossr = boss.getRectangle();
+				if(br.intersects(bossr)){
+					boss.remove();
+					gp.sprites.remove(boss);
+					return;
+				}
+			}
+			/*bossr = boss.getRectangle();
+			if(br.intersects(bossr)){
+				boss.shot();
+				return;
+			}*/
+		}		
 		
 		gp.updateGameUI(this, v.getLife());
 	}
@@ -182,6 +221,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		timer.stop();
 		gameOver();
 	}
+	
 	
 	void controlVehicle(KeyEvent e) {
 		switch (e.getKeyCode()) {
