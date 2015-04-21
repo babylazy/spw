@@ -2,7 +2,9 @@ package f2.spw;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+
 import javax.imageio.ImageIO;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -32,16 +34,14 @@ public class Boss extends Sprite{
 	}
 	
 	public void proceed(){
-		//x += step;
-		//y += step;
-		/*if(x < 320 && y < 520){
-			x += (int)Math.random()*20;
-			y += (int)Math.random()*20;
+		int direction = (int)(Math.random()*2);;
+		if(direction == 1 && x < 390 && y < 590){
+			x += (int)(Math.random()*2);
+			y += (int)(Math.random()*2);
 		}else{
-			x -= (int)Math.random()*20;
-			y -= (int)Math.random()*20;
-		}*/
-		y += 1;		
+			x -= (int)(Math.random()*2);
+			y -= (int)(Math.random()*2);
+		}
 	}
 	
 	public void shot() {
@@ -55,5 +55,7 @@ public class Boss extends Sprite{
 	public int getHp() {
 		return hp;
 	}
+	
+	
 
 }
