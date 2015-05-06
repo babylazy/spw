@@ -17,6 +17,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<Item> items = new ArrayList<Item>();
+	private ArrayList<Upgradebullet> upgradebullets = new ArrayList<Upgradebullet>();
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private ArrayList<Boss> bosses = new ArrayList<Boss>();
 	private SpaceShip v;
@@ -24,9 +25,9 @@ public class GameEngine implements KeyListener, GameReporter{
 	private Timer timer;
 	
 	private long score = 0;
-	private double difficulty = 0.1;
-	private double difficulty2 = 0.001;
-	private double difficulty3 = 0.01;
+	private double difficulty = 0.001;
+	private double difficulty2 = 0.1;
+	private double difficulty3 = 0.001;
 	private boolean upgBullet = false;
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
@@ -57,18 +58,18 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 
 	private void generateItem(){
-		//Item i = new Item((int)(Math.random()*390), 30);
-		Bonusscore bs = new Bonusscore((int)(Math.random()*390), 30);
-		Slowmotion sm = new Slowmotion((int)(Math.random()*390), 30);
-		Pluslife pl = new Pluslife((int)(Math.random()*390), 30);
-		//gp.sprites.add(i);
-		//items.add(i);
+		Bonusscore bs = new Bonusscore((int)(Math.random()*390), 30);		
+		Bonuslife pl = new Bonuslife((int)(Math.random()*390), 30);		
 		gp.sprites.add(bs);
-		items.add(bs);
-		gp.sprites.add(sm);
-		items.add(sm);
+		items.add(bs);		
 		gp.sprites.add(pl);
 		items.add(pl);
+	}
+	
+	private void generateUpgradebullet(){
+		Upgradebullet ub = new Upgradebullet((int)(Math.random()*390), 30);
+		gp.sprites.add(ub);
+		upgradebullets.add(ub);		
 	}
 	
 	private void generateBullet(){
@@ -99,6 +100,7 @@ public class GameEngine implements KeyListener, GameReporter{
 
 		if(Math.random() < difficulty2){
 			generateItem();
+			generateUpgradebullet();
 		}
 		
 		if(Math.random() < difficulty3){
@@ -125,6 +127,17 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!i.isAlive()){
 				i_iter.remove();
 				gp.sprites.remove(i);
+			}
+		}
+		
+		Iterator<Upgradebullet> ub_iter = upgradebullets.iterator();		
+		while(ub_iter.hasNext()){
+			Upgradebullet ub = ub_iter.next();
+			ub.proceed();
+			
+			if(!ub.isAlive()){
+				ub_iter.remove();
+				gp.sprites.remove(ub);
 			}
 		}
 		
@@ -172,11 +185,25 @@ public class GameEngine implements KeyListener, GameReporter{
 		for(Item i : items){
 			er = i.getRectangle();			
 			if(er.intersects(vr)){
-				bonusScore();
-				upgBullet = true;
+				if(i instanceof Addscore){
+					Addscore as = (Addscore)i;
+					score = as.addScore(score);					
+				}
+				if(i instanceof Addlife){
+					Addlife al = (Addlife)i;
+					v.setLife(al.addLife(v.getLife()));
+				}
+				//upgBullet = true;
 				i.remove();
 				gp.sprites.remove(i);
 				return;
+			}
+		}
+		
+		for(Upgradebullet ub : upgradebullets){
+			er = ub.getRectangle();
+			if(er.intersects(vr)){
+				upgBullet = true;
 			}
 		}
 		

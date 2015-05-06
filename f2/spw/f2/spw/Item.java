@@ -43,4 +43,5 @@ public class Item extends Sprite{
 	public void remove() {
 		alive = false;
 	}
+	
 }

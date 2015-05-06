@@ -4,7 +4,7 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class Bonusscore extends Item{
+public class Bonusscore extends Item implements Addscore{
 	public Bonusscore(int x, int y){
 		super(x, y);
 	}
@@ -20,5 +20,9 @@ public class Bonusscore extends Item{
 		g.setColor(Color.GREEN);
 		g.fillRect(x, y, width, height);
 		
+	}
+	
+	public long addScore(long score){
+		return score + 1000;
 	}
 }

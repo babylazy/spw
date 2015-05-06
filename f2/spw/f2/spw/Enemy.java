@@ -34,7 +34,7 @@ public class Enemy extends Sprite{
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 
 					(float)(Y_TO_DIE - y)/(Y_TO_DIE - Y_TO_FADE)));
 		}
-		g.drawImage(eImage, x, y, 80, 80, null);
+		g.drawImage(eImage, x, y, 40, 50, null);
 		
 	}
 

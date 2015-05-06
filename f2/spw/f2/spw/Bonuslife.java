@@ -4,8 +4,8 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class Pluslife extends Item{
-	public Pluslife(int x, int y){
+public class Bonuslife extends Item implements Addlife{
+	public Bonuslife(int x, int y){
 		super(x, y);
 	}
 	
@@ -20,5 +20,9 @@ public class Pluslife extends Item{
 		g.setColor(Color.CYAN);
 		g.fillRect(x, y, width, height);
 		
+	}
+	
+	public int addLife(int life){
+		return life + 1;
 	}
 }

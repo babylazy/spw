@@ -4,8 +4,8 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-public class Slowmotion extends Item{
-	public Slowmotion(int x, int y){
+public class Upgradebullet extends Item{
+	public Upgradebullet(int x, int y){
 		super(x, y);
 	}
 	

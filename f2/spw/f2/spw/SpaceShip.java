@@ -49,5 +49,9 @@ public class SpaceShip extends Sprite{
 	public int getLife() {
 		return life;
 	}
+	
+	public void setLife(int life) {
+		this.life = life;
+	}
 
 }
