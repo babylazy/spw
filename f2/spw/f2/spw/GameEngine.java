@@ -25,8 +25,8 @@ public class GameEngine implements KeyListener, GameReporter{
 	private Timer timer;
 	
 	private long score = 0;
-	private double difficulty = 0.001;
-	private double difficulty2 = 0.1;
+	private double difficulty = 0.1;
+	private double difficulty2 = 0.001;
 	private double difficulty3 = 0.001;
 	private boolean upgBullet = false;
 	
@@ -157,7 +157,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			Boss boss = boss_iter.next();
 			boss.proceed();
 			
-			if(boss.getHp() < 0){
+			if(boss.getHp() <= 0){
 				boss_iter.remove();
 				gp.sprites.remove(boss);
 				score += 5000;
@@ -214,6 +214,8 @@ public class GameEngine implements KeyListener, GameReporter{
 				if(br.intersects(er)){
 					e.remove();
 					gp.sprites.remove(e);
+					b.remove();
+					gp.sprites.remove(b);
 					return;
 				}
 			}
@@ -221,8 +223,10 @@ public class GameEngine implements KeyListener, GameReporter{
 			for(Boss boss : bosses){
 				bossr = boss.getRectangle();
 				if(br.intersects(bossr)){
-					boss.remove();
-					gp.sprites.remove(boss);
+					boss.shot();
+					b.remove();
+					gp.sprites.remove(b);
+					//gp.sprites.remove(boss);
 					return;
 				}
 			}

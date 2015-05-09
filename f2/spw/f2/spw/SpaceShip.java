@@ -8,6 +8,7 @@ import java.io.IOException;
 
 public class SpaceShip extends Sprite{
 	private Image spshipImage;
+	private Image explodeImage;
 
 	int step = 8;
 	int life = 5;
@@ -15,8 +16,10 @@ public class SpaceShip extends Sprite{
 	public SpaceShip(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		try {
-			File source = new File("f2/spw/Icons/JediStarFighter.png");
-			spshipImage = ImageIO.read(source);
+			File spshipImagesource = new File("f2/spw/Icons/JediStarFighter.png");
+			spshipImage = ImageIO.read(spshipImagesource);
+			File explodeImagesource = new File("f2/spw/Icons/explode.png");
+			explodeImage = ImageIO.read(explodeImagesource);
 		}catch (IOException e) {
 			e.printStackTrace();
         }
@@ -24,8 +27,11 @@ public class SpaceShip extends Sprite{
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.drawImage(spshipImage, x, y, width, height, null);
-		
+		if(life <= 0){
+			g.drawImage(explodeImage, x, y, width, height, null);
+		}else{
+			g.drawImage(spshipImage, x, y, width, height, null);
+		}		
 	}
 
 	public void move(int directionX, int directionY){
