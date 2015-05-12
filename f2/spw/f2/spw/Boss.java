@@ -15,7 +15,6 @@ public class Boss extends Sprite{
 	private Image bImage;
 	private boolean alive = true;
 	private int hp = 3;
-	private int step = (int)Math.random()*20;
 	
 	public Boss(int x, int y) {
 		super(x, y, 80, 80);
@@ -36,11 +35,11 @@ public class Boss extends Sprite{
 	public void proceed(){
 		int direction = (int)(Math.random()*2);;
 		if(direction == 1 && x < 390 && y < 590){
-			x += (int)(Math.random()*2);
-			y += (int)(Math.random()*2);
+			x += (int)(Math.random()*5);
+			y += (int)(Math.random()*5);
 		}else{
-			x -= (int)(Math.random()*2);
-			y -= (int)(Math.random()*2);
+			x -= (int)(Math.random()*5);
+			y -= (int)(Math.random()*5);
 		}
 	}
 	
